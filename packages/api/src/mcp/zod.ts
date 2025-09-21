@@ -350,7 +350,7 @@ export function convertJsonSchemaToZod(
     } else {
       zodSchema = z.string();
     }
-  } else if (schema.type === 'number') {
+  } else if (schema.type === 'number' || schema.type === 'integer' || schema.type === 'float') {
     zodSchema = z.number();
   } else if (schema.type === 'boolean') {
     zodSchema = z.boolean();
@@ -436,13 +436,13 @@ export function convertJsonSchemaToZod(
       const partial = Object.fromEntries(
         Object.entries(shape).map(([key, value]) => [
           key,
-          schema.required?.includes(key) === true ? value : value.optional().nullable(),
+          schema.required?.includes(key) === true ? value : value.optional(),
         ]),
       );
       objectSchema = z.object(partial);
     } else {
       const partialNullable = Object.fromEntries(
-        Object.entries(shape).map(([key, value]) => [key, value.optional().nullable()]),
+        Object.entries(shape).map(([key, value]) => [key, value.optional()]),
       );
       objectSchema = z.object(partialNullable);
     }
